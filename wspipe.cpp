@@ -39,9 +39,9 @@ int ws_callback(
   switch (reason) {
   case LWS_CALLBACK_CLIENT_ESTABLISHED:
     {
-      cbdata& d = *static_cast<cbdata*>(libwebsocket_context_user(ctx));
-      std::cerr << "Connected to websocket at "
-                << d.host << ':' << d.port << d.path << std::endl;
+      // cbdata& d = *static_cast<cbdata*>(libwebsocket_context_user(ctx));
+      // std::cerr << "Connected to websocket at "
+      //           << d.host << ':' << d.port << d.path << std::endl;
       // schedule first write callback
       libwebsocket_callback_on_writable(ctx, ws);
     }
@@ -138,8 +138,8 @@ int main(int argc, char** argv) {
   cbdata d{host, path, port, false, {}, nullptr};
 
   libwebsocket_protocols protocols[] = {
-    { "wspipe", ws_callback, 0, 0, 0, nullptr, 0 },
-    { nullptr, nullptr, 0, 0, 0, nullptr, 0 }
+    { "wspipe", ws_callback, 0, 0, 0, nullptr, nullptr, 0 },
+    { nullptr, nullptr, 0, 0, 0, nullptr, nullptr, 0 }
   };
 
   lws_context_creation_info info;
@@ -177,10 +177,10 @@ int main(int argc, char** argv) {
     "libwebsocket connect failed for " << host << ':' << port << path
   );
 
-  std::cerr << "Waiting for connection to "
-            << host << ':' << port << path << std::endl;
+  // std::cerr << "Waiting for connection to "
+  //           << host << ':' << port << path << std::endl;
   while (libwebsocket_service(ctx.get(), 0) >= 0 && !d.was_closed);
-  std::cerr << "Disconnected from "
-            << host << ':' << port << path << std::endl;
+  // std::cerr << "Disconnected from "
+  //           << host << ':' << port << path << std::endl;
   return 0;
 }
